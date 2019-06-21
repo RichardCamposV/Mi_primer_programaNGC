@@ -17,7 +17,6 @@ apetece_helado = apetece_helado_input == "SI"
 puede_permitirselo = tiene_dinero_input == "SI" or tia_input == "SI"
 senor_helados = senor_helados_input == "SI"
 
-
 if apetece_helado and puede_permitirselo and senor_helados:
     print("Pues comete un helado")
 
