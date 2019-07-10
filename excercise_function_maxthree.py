@@ -21,6 +21,3 @@ def max_number(numbers):
 
 print(max_number("Dime tu numero: "))
 
-
-
-
