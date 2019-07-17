@@ -7,8 +7,6 @@ def reverse_string(string_to_reverse):
         current_index -= 1
     return string_reversed
 
-# def biggest_number_of_three(first, second, third):
-
 
 print(reverse_string("Hola"))
 print(reverse_string("Cocacola"))
