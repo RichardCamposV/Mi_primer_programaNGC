@@ -26,7 +26,7 @@ def ask_until_option_expected(options):
 def show_menu():
     print("Acciones disponibles: ")
     print("1 - Añadir contacto")
-    print("2 - Eliminar contacto")
+    print("2 - Eliminar contacto o agenda")
     print("3 - Buscar contacto")
     print("4 - Exportar contacto a un CSV")
     print("5 - Salir")
@@ -49,22 +49,32 @@ def add_contact(contacts):
 def remove_contact(contacts):
     print("\n\nEliminar contacto\n")
     print("1 - Eliminar contacto \n2 - Borrar agenda de contactos")
-    user_action = input("¿Qué deseas hacer?")
-    if user_action.isdigit() == 1:
-        search_term = input("Introducir el nombre o parte de él: ")
-        found_contacts = []
+    user_action = int(input("¿Qué deseas hacer? "))
+    if user_action == 1:
+        if len(contacts) != 0:
+            contact_delete = input("Nombre de la persona que desea eliminar: ")
+            contact_counter = 0
 
-        print("He encontrado los siguientes contactos ")
-        contact_indexes = []
-        contact_counter = 0
+            for contact in contacts:
+                if contact_delete == contact["name"]:
+                    del contacts[contact_counter]
+                    save_contacts(contacts)
+                contact_counter += 1
 
-        for contact in contacts:
-            if contact["name"].find(search_term) >= 0
+            if contact_delete not in contacts:
+                print("No se encontro ningun contacto con el nombre de {}\n\n".format(contact_delete))
+            sleep(TIME_QUERY)
+            return contacts
 
-    elif user_action.isdigit() == 2:
-        pass
+        else:
+            print("No existe ninguna agenda actualmente\n\n")
+
+    elif user_action == 2:
+        del contacts
+        save_contacts([])
 
     sleep(TIME_QUERY)
+    return
 
 
 def find_contact(contacts):
@@ -72,7 +82,7 @@ def find_contact(contacts):
     search_term = input("Introducir el nombre o parte de él: ")
     found_contacts = []
 
-    print("He encontrado los siguientes contactos ")
+    print("He encontrado los siguientes contactos: ")
     contact_indexes = []
     contact_counter = 0
 
@@ -88,7 +98,8 @@ def find_contact(contacts):
     if len(contact_indexes) > 1:
         contact_index = ask_until_option_expected(contact_indexes)
     elif len(contact_indexes) == 0:
-        print("No se ha encontrado ninguno.")
+        print("No se ha encontrado ninguno.\n\n")
+        sleep(TIME_QUERY)
         return
 
     print("\nInformación sobre {}\n\n".format(found_contacts[contact_index]["name"]))
@@ -112,7 +123,7 @@ def load_contacts():
 def save_contacts(contacts):
     with open(SAVE_FILE_NAME, "wb") as save_file:
         pickle.dump(contacts, save_file)
-    print("Datos guardados correctamente.")
+    print("Datos guardados correctamente.\n\n")
 
 
 def main():
