@@ -79,7 +79,13 @@ def remove_contact(contacts):
 
 def find_contact(contacts):
     print("\n\nBuscar contacto\n")
-    search_term = input("Introducir el nombre o parte de él: ")
+    search_term = ""
+    user_action = int(input("Buscar por nombre (1) / Buscar por correo electronico (2): "))
+    if user_action == 1:
+        search_term = input("Introducir el nombre o parte de él: ")
+    elif user_action == 2:
+        search_term = input("Introducir el correo electronico o parte de él: ")
+
     found_contacts = []
 
     print("He encontrado los siguientes contactos: ")
@@ -87,7 +93,7 @@ def find_contact(contacts):
     contact_counter = 0
 
     for contact in contacts:
-        if contact["name"].find(search_term) >= 0:
+        if contact["name"] and contact["email"].find(search_term) >= 0:
             found_contacts.append(contact)
             print("{} - {}".format(contact_counter, contact["name"]))
             contact_indexes.append(contact_counter)
@@ -98,9 +104,13 @@ def find_contact(contacts):
     if len(contact_indexes) > 1:
         contact_index = ask_until_option_expected(contact_indexes)
     elif len(contact_indexes) == 0:
-        print("No se ha encontrado ninguno.\n\n")
-        sleep(TIME_QUERY)
-        return
+        print("No se ha encontrado ninguno.")
+        user_action = int(input("Buscar contacto (1) / Regresar al menu principal (2): "))
+        if user_action == 1:
+            return find_contact(contacts)
+        else:
+            sleep(TIME_QUERY)
+            return
 
     print("\nInformación sobre {}\n\n".format(found_contacts[contact_index]["name"]))
     print("Nombre: {name}, Telefono: {phone}, Email: {email}\n\n".format(**found_contacts[contact_index]))
