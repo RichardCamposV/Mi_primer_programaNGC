@@ -43,20 +43,19 @@ def add_contact(contacts, name, phone, email):
             "phone": phone,
             "email": email
     }
-    contacts.append(contact)
+
+    search_contact_save(contacts, contact)
     return contact
 
 
 def add_contact_tk(contacts, name, phone, email, frame_contact_list):
+
     contact = add_contact(contacts, name, phone, email)
     cols, row = frame_contact_list.grid_size()
     ttk.Label(frame_contact_list, text=contact["name"]).grid(column=1, row=row, sticky=W)
     ttk.Label(frame_contact_list, text=contact["phone"]).grid(column=2, row=row, sticky=W)
     ttk.Label(frame_contact_list, text=contact["email"]).grid(column=3, row=row, sticky=W)
-    # se restaura el padding anterior con el que sigue, ya que cuenta en total los 7 widgets
     configure_grid(frame_contact_list, 20, 0)
-
-    save_contacts(contacts)
 
 
 def configure_grid(frame, x, y):
@@ -166,6 +165,24 @@ def load_contacts():
         return []
 
 
+def search_contact_save(contacts, contact):
+    index_number = 0
+    contacts_preview = []
+
+    if len(contacts) == 0:
+        contacts.append(contact)
+        save_contacts(contacts)
+    else:
+        if contact["name"] not in contacts[index_number]["name"]:
+            contacts.append(contact)
+
+        for member in contacts:
+            contacts_preview.append(member)
+            if member["name"] not in contacts_preview[index_number]["name"]:
+                save_contacts(contacts)
+            index_number *= 1
+
+
 def save_contacts(contacts):
     with open(SAVE_FILE_NAME, "wb") as save_file:
         pickle.dump(contacts, save_file)
@@ -173,8 +190,8 @@ def save_contacts(contacts):
 
 
 def main():
-    # contacts = []
-    contacts = load_contacts()
+    contacts = []
+    # contacts = load_contacts()
 
     root = Tk()
     root.title("Contacts")
