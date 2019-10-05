@@ -70,6 +70,11 @@ def ask_new_contact(contacts):
     sleep(TIME_QUERY)
 
 
+def remove_contact_ttk(contacts):
+    del contacts
+    save_contacts([])
+
+
 def remove_contact(contacts):
     print("\n\nEliminar contacto\n")
     print("1 - Eliminar contacto \n2 - Borrar agenda de contactos")
@@ -94,8 +99,7 @@ def remove_contact(contacts):
             print("No existe ninguna agenda actualmente\n\n")
 
     elif user_action == 2:
-        del contacts
-        save_contacts([])
+        remove_contact_ttk(contacts)
 
     sleep(TIME_QUERY)
     return
@@ -190,8 +194,7 @@ def save_contacts(contacts):
 
 
 def main():
-    contacts = []
-    # contacts = load_contacts()
+    contacts = load_contacts()
 
     root = Tk()
     root.title("Contacts")
@@ -206,9 +209,9 @@ def main():
     email = StringVar()
     phone = StringVar()
 
-    ttk.Label(frame_add_contact, text="Nombre").grid(column=1, row=1, sticky=W)
+    ttk.Label(frame_add_contact, text="Name").grid(column=1, row=1, sticky=W)
     ttk.Label(frame_add_contact, text="Email").grid(column=2, row=1, sticky=(W, E))
-    ttk.Label(frame_add_contact, text="Telefono").grid(column=3, row=1, sticky=W)
+    ttk.Label(frame_add_contact, text="Phone").grid(column=3, row=1, sticky=W)
 
     ttk.Entry(frame_add_contact, width=30, textvariable=name).grid(column=1, row=2, sticky=W)
     ttk.Entry(frame_add_contact, width=30, textvariable=email).grid(column=2, row=2, sticky=(W, E))
@@ -216,16 +219,17 @@ def main():
 
     ttk.Label(frame_contact_list, text="Diary:").grid(column=1, row=1, sticky=W)
 
-    ttk.Label(frame_contact_list, text="Nombre").grid(column=1, row=2, sticky=W)
-    ttk.Label(frame_contact_list, text="Telefono").grid(column=2, row=2, sticky=(W, E))
+    ttk.Label(frame_contact_list, text="Name").grid(column=1, row=2, sticky=W)
+    ttk.Label(frame_contact_list, text="Phone").grid(column=2, row=2, sticky=(W, E))
     ttk.Label(frame_contact_list, text="Email").grid(column=3, row=2, sticky=W)
 
     print_contacts_ttk(contacts, frame_contact_list)
 
     ttk.Button(frame_add_contact,
-               text="Añadir",
+               text="Add",
                command=lambda: add_contact_tk(contacts, name.get(), phone.get(), email.get(), frame_contact_list)
                ).grid(column=3, row=3)
+    ttk.Button(frame_add_contact, text="Delete", command=lambda: remove_contact_ttk(contacts)).grid(column=4, row=3)
 
     configure_grid(frame_contact_list, 20, 10)
 
